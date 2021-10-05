@@ -4,18 +4,21 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"time"
 )
 const (
 	POST_TABLE = "posts"
 )
 type Post struct {
-	ID   		string 	`json:"id,omitempty"`
-	UserId		string	`json:"user_id,omitempty"`
-	Title		string	`json:"title,omitempty"`
-	Details		string	`json:"details,omitempty"`
-	Access		int		`json:"access,omitempty"`
-	CreatedAt 	int64	`json:"created_at,omitempty"`
-	UpdatedAt	int64	`json:"updated_at,omitempty"`
+	ID   			string 	`json:"id,omitempty"`
+	UserId			string	`json:"user_id,omitempty"`
+	UserFirstName	string	`json:"user_first_name"`
+	UserLastName	string	`json:"user_last_name"`
+	Title			string	`json:"title,omitempty"`
+	Details			string	`json:"details,omitempty"`
+	Access			int		`json:"access,omitempty"`
+	CreatedAt 		int64	`json:"created_at,omitempty"`
+	UpdatedAt		int64	`json:"updated_at,omitempty"`
 }
 
 type PostModel struct {
@@ -51,14 +54,14 @@ func (model *PostModel) GetPostsByUserId(userId string) ([]Post, error) {
 }
 
 func (model *PostModel) GetAllPost(userId string) ([]Post, error) {
-	rows, err := model.DB.Query(fmt.Sprintf("SELECT id, title, details, access, created_at, user_id FROM %s ORDER BY created_at DESC;", POST_TABLE))
+	rows, err := model.DB.Query(fmt.Sprintf("SELECT p.id, p.title, p.details, p.access, p.created_at, p.user_id, u.firstname, u.lastname FROM %s p INNER JOIN %s u ON p.user_id = u.id ORDER BY p.created_at DESC;", POST_TABLE, TABLE))
 	if err != nil {
 		return nil, err
 	}
 	var posts []Post
 	for rows.Next() {
 		var post Post
-		err := rows.Scan(&post.ID, &post.Title, &post.Details, &post.Access, &post.CreatedAt, &post.UserId)
+		err := rows.Scan(&post.ID, &post.Title, &post.Details, &post.Access, &post.CreatedAt, &post.UserId, &post.UserFirstName, &post.UserLastName)
 		if err != nil {
 			return nil, err
 		}
@@ -108,3 +111,11 @@ func (model *PostModel) DeletePostById(postId string, userId string) error {
 	}
 	return nil
 }
+
+func (p Post) FormatTime(t int64) string {
+	return time.Unix(t, 0).Format("Jan 02, 2006")
+}
+
+//func (p Post) GetUser() string {
+//	return fmt.Sprintf("%s...", detail[:3])
+//}
