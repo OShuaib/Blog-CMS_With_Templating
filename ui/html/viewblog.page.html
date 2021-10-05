@@ -1,0 +1,39 @@
+{{template "master"}}
+
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-md-12 float-right mb-2">
+            <a href="/" class="btn btn-dark">Back</a>
+        </div>
+    </div>
+    <div class="shadow p-3 mb-5 bg-body rounded">
+        <h4>
+            <strong>{{.Title}}</strong>
+        </h4>
+        <hr>
+        <p>{{.Details}}</p>
+    </div>
+
+    <div class="row">
+        {{if .Message}}
+        <div class="alert alert-{{.Color}}">
+            {{ .Message}}
+        </div>
+        {{end}}
+        <div class="col-md-12 col-sm-12 col-lg-4">
+            <form action="/{{.ID}}/comment/create" method="post">
+                <textarea class="form-control" name="comment" rows="5" placeholder="Write your comment" required></textarea>
+                <br>
+                <button class="btn btn-dark" type="submit">Comment</button>
+            </form>
+        </div>
+        <div class="col-md-12 col-sm-12 col-lg-6">
+            <h5>Comments <b class="badge bg-success">{{.Comment}}</b></h5>
+            <hr>
+            {{with .Comments}}{{range $key, $comment := .}}
+                <div class="mb-3" style="border-bottom: dotted lightgreen">{{$comment.Comment}}</div>
+            {{end}}{{end}}
+        </div>
+    </div>
+
+</div>
