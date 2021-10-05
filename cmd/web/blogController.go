@@ -42,10 +42,14 @@ func (app *Application) ViewAllPosts(c *gin.Context) {
 
 	posts, err := app.postModel.GetAllPost(user_id)
 	if err != nil {
-		app.ServerError(c, err)
-		return
+		app.errorLog.Printf("%v", err)
+
 	}
-	c.JSON(http.StatusOK, gin.H{"data": posts})
+	var check bool
+	if len(posts) > 0 {
+		check = true
+	}
+	c.HTML(http.StatusOK, "blog.page.html", gin.H{"Check": check, "Post": posts})
 }
 
 // View all the Post for a particular user

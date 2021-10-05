@@ -17,6 +17,10 @@ type Application struct {
 	userModel		interfaces.User
 	postModel		interfaces.Blogger
 }
+
+type Message struct {
+	Msg  string
+}
 func main() {
 	addr := flag.String("addr", ":3500", "Enter the New Port")
 	flag.Parse()
