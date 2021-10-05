@@ -16,7 +16,12 @@
 <body>
 
    <div class="container" style="margin-left: auto; margin-right: auto; margin-top: 150px;">
-       <form action="">
+       {{if .Message}}
+       <div class="alert alert-{{.Color}}">
+           {{ .Message}}
+       </div>
+       {{end}}
+       <form action="/login" method="post">
             <div class="myModal" tabindex="-1">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -33,12 +38,13 @@
                            <div class="form-group mb-3">
                                <label for="pass">Password</label>
                                <input type="password" name="password" id="pass" class="form-control" required>
+                               <a href="#" id="togglePass" style="float: right">Show</a>
                            </div>
                        </div>
                         <hr>
                        <div class="container mb-3 mt-3">
                            <div style="float: left">
-                               Don't have an Account? <a href="">Signup</a>
+                               Don't have an Account? <a href="/signup">Signup</a>
                            </div>
                            <div style="float: right ">
                                <button type="submit" class="btn btn-primary">Login</button>
