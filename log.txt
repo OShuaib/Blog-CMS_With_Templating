@@ -1,0 +1,7 @@
+Error:	2021/10/05 23:07:54 controller.go:39: An Error Occurred: invalid character 'e' looking for beginning of value
+Error:	2021/10/05 23:10:19 controller.go:39: An Error Occurred: invalid character 'e' looking for beginning of value
+Error:	2021/10/05 23:12:14 controller.go:39: An Error Occurred: invalid character 'e' looking for beginning of value
+Error:	2021/10/05 23:14:23 controller.go:39: An Error Occurred: invalid character 'e' looking for beginning of value
+Error:	2021/10/05 23:19:58 controller.go:39: An Error Occurred: invalid character 'e' looking for beginning of value
+Error:	2021/10/05 23:21:22 controller.go:39: An Error Occurred: invalid character 'e' looking for beginning of value
+INFO:	2021/10/05 23:37:20 controller.go:102: Registration Successful
