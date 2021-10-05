@@ -17,7 +17,6 @@ type Application struct {
 	userModel		interfaces.User
 	postModel		interfaces.Blogger
 }
-
 func main() {
 	addr := flag.String("addr", ":3500", "Enter the New Port")
 	flag.Parse()
@@ -65,13 +64,12 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-}
 
+}
 func (app *Application) ServerError(c *gin.Context, err error) {
 	app.errorLog.Printf(err.Error())
 	c.JSON(http.StatusInternalServerError, gin.H{"message": http.StatusText(http.StatusInternalServerError)})
 }
-
 func (app *Application) InfoError(c *gin.Context, message string, code int) {
 	app.infoLog.Println(message)
 	c.JSON(code, gin.H{"message": message})

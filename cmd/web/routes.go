@@ -7,7 +7,7 @@ import (
 
 func (app *Application) routes(router *gin.Engine) *gin.Engine {
 	//router.GET("/", app.Index)
-	router.GET("/signup", app.SignUpUser)
+	router.GET("/signup", app.SignupPageHandler)
 	router.POST("/signup", app.SignUpUser)
 	router.GET("/login", app.LoginPageHandler)
 	router.POST("/login", app.LoginUser)
