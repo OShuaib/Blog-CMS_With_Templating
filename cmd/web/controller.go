@@ -13,9 +13,14 @@ func (app *Application) Index(c *gin.Context) {
 	c.JSON(200, gin.H{"Message" : "This is the Index Page"})
 }
 
+func (app *Application) SignupPageHandler(c *gin.Context) {
+	c.HTML(200, "signup.page.html", nil)
+}
+
 func (app *Application) LoginPageHandler(c *gin.Context) {
 	c.HTML(200, "login.page.html", nil)
 }
+
 func (app *Application) SignUpUser(c *gin.Context) {
 	var user *models.User
 	err := c.BindJSON(&user)
