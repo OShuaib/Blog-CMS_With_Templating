@@ -39,9 +39,14 @@ func (app *Application) routes(router *gin.Engine) *gin.Engine {
 
 		commentRouter := subRouter.Group("/comment")
 		{
-			commentRouter.POST("/")
+			commentRouter.POST("/create", app.CreateComment)
 			commentRouter.DELETE("/:commentId")
 			commentRouter.PUT("/:commentId")
+		}
+		likeRouter := subRouter.Group("/like")
+		{
+			likeRouter.GET("/", app.LikeAPost)
+			likeRouter.GET("/unlike", app.UnLikeAPost)
 		}
 	}
 	return router
