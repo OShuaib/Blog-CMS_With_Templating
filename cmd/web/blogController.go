@@ -12,6 +12,8 @@ import (
 // Create a new Blog Post
 func (app *Application) CreateBlogPost(c *gin.Context) {
 	var blogPost models.Post
+
+
 	userId, _ := c.Get("userId")
 	id := userId.(string)
 	//err := c.BindJSON(&blogPost)
@@ -149,7 +151,14 @@ func (app *Application) ViewPostById(c *gin.Context) {
 	postId := c.Param("id")
 
 	post, err := app.postModel.ViewBlogPostById(postId)
+	newView := post.Views + 1
 
+	err = app.postModel.IncrementViews(postId, newView)
+	if err != nil{
+		c.Redirect(302, "/blog/")
+		app.errorLog.Printf("%v\n",err.Error())
+		return
+	}
 	if err != nil {
 		c.Redirect(302, "/blog/")
 		app.errorLog.Printf("%v\n",err.Error())
@@ -164,8 +173,9 @@ func (app *Application) ViewPostById(c *gin.Context) {
 	}
 	//c.JSON(200, gin.H{"data": post})
 
-	m["Post"] = post
+	m["BlogPost"] = post
 	m["Comments"] = comments
+	//m["Count"] = len(comments)
 	app.Render(c, "viewblog.page.html", userId, m)
 	m["Message"] = ""
 	m["Color"] = ""
