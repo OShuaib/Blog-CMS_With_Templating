@@ -4,7 +4,6 @@ import (
 	"github.com/Ad3bay0c/BlogCMS/cmd/models"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"net/http"
 	"strconv"
 	"strings"
 	"time"
@@ -144,18 +143,32 @@ func (app *Application) updateBlogPost(c *gin.Context) {
 }
 
 func (app *Application) ViewPostById(c *gin.Context) {
-	//param, _ := c.Get("userId")
-	//userId := param.(string)
+	param, _ := c.Get("userId")
+	userId := param.(string)
 
 	postId := c.Param("id")
 
 	post, err := app.postModel.ViewBlogPostById(postId)
+
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"message": "Invalid ID"})
+		c.Redirect(302, "/blog/")
 		app.errorLog.Printf("%v\n",err.Error())
 		return
 	}
-	c.JSON(200, gin.H{"data": post})
+
+	comments, err := app.commentModel.ViewCommentByPostId(postId)
+	if err != nil {
+		c.Redirect(302, "/blog/")
+		app.errorLog.Printf("%v\n",err.Error())
+		return
+	}
+	//c.JSON(200, gin.H{"data": post})
+
+	m["Post"] = post
+	m["Comments"] = comments
+	app.Render(c, "viewblog.page.html", userId, m)
+	m["Message"] = ""
+	m["Color"] = ""
 }
 
 func (app *Application) DeleteBlogPost(c *gin.Context) {
