@@ -16,6 +16,7 @@ type Application struct {
 	errorLog		*log.Logger
 	userModel		interfaces.User
 	postModel		interfaces.Blogger
+	commentModel	interfaces.Commentable
 }
 
 type Message struct {
@@ -46,6 +47,7 @@ func main() {
 		errorLog: errorLog,
 		userModel: &models.UserModel{DB: db},
 		postModel: &models.PostModel{DB: db},
+		commentModel: &models.CommentModel{DB: db},
 	}
 
 	r := gin.Default()
