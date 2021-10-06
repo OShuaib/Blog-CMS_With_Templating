@@ -137,7 +137,7 @@ func (app *Application) LoginUser(c *gin.Context) {
 		//c.JSON(http.StatusBadRequest, gin.H{"message": "Invalid Email"})
 		return
 	}
-	c.SetCookie("session", userM.ID, 60*2, "/", "", true, true)
+	c.SetCookie("session", userM.ID, 60*60, "/", "", true, true)
 	m["Message"] = "Logged In Successfully"
 	m["Color"] = "success"
 	c.Redirect(http.StatusFound, "/")
