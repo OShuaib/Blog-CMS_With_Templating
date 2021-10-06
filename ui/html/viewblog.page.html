@@ -1,17 +1,17 @@
-{{template "master"}}
+{{template "header.component.html" .}}
 
 <div class="container mt-3">
     <div class="row">
         <div class="col-md-12 float-right mb-2">
-            <a href="/" class="btn btn-dark">Back</a>
+            <a href="/blog" class="btn btn-dark">Back</a>
         </div>
     </div>
     <div class="shadow p-3 mb-5 bg-body rounded">
         <h4>
-            <strong>{{.Title}}</strong>
+            <strong>{{.Post.Title}}</strong>
         </h4>
         <hr>
-        <p>{{.Details}}</p>
+        <p>{{.Post.Details}}</p>
     </div>
 
     <div class="row">
@@ -37,3 +37,4 @@
     </div>
 
 </div>
+{{template "footer.component.html" .}}
