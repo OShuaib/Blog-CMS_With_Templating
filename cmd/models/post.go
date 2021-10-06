@@ -25,6 +25,7 @@ type Post struct {
 type PostModel struct {
 	DB *sql.DB
 }
+
 func (model *PostModel) SavePost(post Post) error {
 	stmt, err := model.DB.Prepare(fmt.Sprintf("INSERT INTO %s (id, title, details, access, user_id, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7);",POST_TABLE))
 	if err != nil {
@@ -112,6 +113,7 @@ func (model *PostModel) DeletePostById(postId string, userId string) error {
 	}
 	return nil
 }
+
 
 func (p Post) FormatTime(t int64) string {
 	return time.Unix(t, 0).Format("Jan 02, 2006")
