@@ -6,7 +6,7 @@
     <div class="col-12 mb-2">
       <div class="shadow-lg bg-body rounded">
         <div class="card-body">
-          <a href="/{{$blog.ID}}" class="card-title text-success" style="text-decoration-line: none"
+          <a href="/blog/{{$blog.ID}}" class="card-title text-success" style="text-decoration-line: none"
             >{{ $blog.Title}}</a>
           <p class="text-muted">Posted on: {{$blog.FormatTime $blog.CreatedAt}} By: {{$blog.UserFirstName}} {{$blog.UserLastName}}</p>
           <div class="row card-subtitle mt-2">
