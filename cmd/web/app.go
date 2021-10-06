@@ -80,6 +80,6 @@ func (app *Application) InfoError(c *gin.Context, message string, code int) {
 }
 
 func (app *Application) Render(c *gin.Context, page string, userId string, data interface{}) {
-	c.SetCookie("session", userId, 60*2, "/", "", true, true)
+	c.SetCookie("session", userId, 60*30, "/", "", true, true)
 	c.HTML(200, page, data)
 }
