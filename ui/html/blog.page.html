@@ -1,5 +1,4 @@
-{{template "master"}} {{define "title"}} Blog Page {{end}}
-
+{{template "header.component.html" .}}
 <div class="container mt-3">
     <h4>All Posts</h4>
   <div class="row justify-content-centers">
@@ -11,12 +10,7 @@
             >{{ $blog.Title}}</a>
           <p class="text-muted">Posted on: {{$blog.FormatTime $blog.CreatedAt}} By: {{$blog.UserFirstName}} {{$blog.UserLastName}}</p>
           <div class="row card-subtitle mt-2">
-<!--            <div class="text-muted col-3">-->
-<!--              <h6>Comments: <b class="badge bg-success">{{$blog.Comments}}</b></h6>-->
-<!--            </div>-->
-<!--            <div class="text-muted col-3">-->
-<!--              <h6>Views: <b class="badge bg-success">{{ $blog.Views}}</b></h6>-->
-<!--            </div>-->
+
           </div>
         </div>
       </div>
@@ -27,3 +21,4 @@
     {{end}}
   </div>
 </div>
+{{template "footer.component.html"}}
