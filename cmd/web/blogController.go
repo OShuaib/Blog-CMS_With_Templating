@@ -174,5 +174,9 @@ func (app *Application) DeleteBlogPost(c *gin.Context) {
 		c.Redirect(302, "/user/my-blog-posts")
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "Deleted Successfully"})
+	//c.JSON(http.StatusOK, gin.H{"message": "Deleted Successfully"})
+	m["Message"] = "Deleted Successfully"
+	m["Color"] = "success"
+	//c.JSON(http.StatusBadRequest, gin.H{"message": "Title/Details cannot be empty"})
+	c.Redirect(302, "/user/my-blog-posts")
 }
