@@ -5,14 +5,17 @@ import (
 	"github.com/Ad3bay0c/BlogCMS/cmd/models"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"log"
 	"net/http"
+	"os"
 	"time"
 )
 
 var m = map[string]interface{}{}
 
 func (app *Application) Index(c *gin.Context) {
-	c.Redirect(302, "/blog/")
+	log.Print(os.Getenv("SESSION_ID"))
+	c.Redirect(302, "/login")
 }
 
 func (app *Application) SignupPageHandler(c *gin.Context) {
@@ -106,7 +109,7 @@ func (app *Application) SignUpUser(c *gin.Context) {
 }
 
 func (app *Application) LoginUser(c *gin.Context) {
-
+	app.errorLog.Printf("%v", os.Getenv("SESSION_ID"))
 	var user = &models.User{}
 
 	user.Email = c.PostForm("email")
@@ -134,7 +137,7 @@ func (app *Application) LoginUser(c *gin.Context) {
 		//c.JSON(http.StatusBadRequest, gin.H{"message": "Invalid Email"})
 		return
 	}
-	c.SetCookie("session", userM.ID, 60*60*24, "/", "", true, true)
+	c.SetCookie("session", userM.ID, 60*2, "/", "", true, true)
 	m["Message"] = "Logged In Successfully"
 	m["Color"] = "success"
 	c.Redirect(http.StatusFound, "/")
