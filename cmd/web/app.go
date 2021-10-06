@@ -78,3 +78,8 @@ func (app *Application) InfoError(c *gin.Context, message string, code int) {
 	app.infoLog.Println(message)
 	c.JSON(code, gin.H{"message": message})
 }
+
+func (app *Application) Render(c *gin.Context, page string, userId string, data interface{}) {
+	c.SetCookie("session", userId, 60*2, "/", "", true, true)
+	c.HTML(200, page, data)
+}
