@@ -84,7 +84,22 @@ func (app *Application) ViewMyBlogPost(c *gin.Context) {
 	delete(m, "Post")
 }
 func (app *Application) editBlogPostPage(c *gin.Context) {
+	//param, _ := c.Get("userId")
+	//user_id := param.(string)
 
+	postId := c.Param("id")
+
+	post, err := app.postModel.ViewBlogPostById(postId)
+	if err != nil {
+		//c.JSON(http.StatusBadRequest, gin.H{"message": "Invalid ID"})
+		m["Message"] = "OOPS!!!, Something went wrong"
+		m["Color"] = "danger"
+		c.Redirect(302, "/user/my-blog-posts")
+		app.errorLog.Printf("%v\n",err.Error())
+		return
+	}
+	m["Post"] = post
+	c.Redirect(302, "/user/my-blog-posts")
 }
 
 func (app *Application) updateBlogPost(c *gin.Context) {
@@ -95,13 +110,16 @@ func (app *Application) updateBlogPost(c *gin.Context) {
 
 	var blogPost models.Post
 
-	err := c.BindJSON(&blogPost)
-	if err != nil {
-		app.ServerError(c, err)
-		return
-	}
+	blogPost.Title = strings.TrimSpace(c.PostForm("title"))
+	blogPost.Details = strings.TrimSpace(c.PostForm("details"))
+	access := c.PostForm("access")
+	blogPost.Access, _ = strconv.Atoi(access)
+
 	if blogPost.Title == "" || blogPost.Details == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"message": "Title/Details cannot be empty"})
+		m["Message"] = "Title/Details cannot be empty"
+		m["Color"] = "danger"
+		//c.JSON(http.StatusBadRequest, gin.H{"message": "Title/Details cannot be empty"})
+		c.Redirect(302, "/user/my-blog-posts")
 		return
 	}
 
@@ -109,13 +127,20 @@ func (app *Application) updateBlogPost(c *gin.Context) {
 	blogPost.UserId = user_id
 	blogPost.UpdatedAt = time.Now().Unix()
 
-	err = app.postModel.UpdatePost(blogPost)
+	err := app.postModel.UpdatePost(blogPost)
 	if err != nil {
-		c.JSON(http.StatusNotAcceptable, gin.H{"message": "Error Updating Value"})
 		app.errorLog.Printf("%v", err.Error())
+		m["Message"] = "Something went wrong"
+		m["Color"] = "danger"
+		//c.JSON(http.StatusBadRequest, gin.H{"message": "Title/Details cannot be empty"})
+		c.Redirect(302, "/user/my-blog-posts")
 		return
 	}
-	c.JSON(201, gin.H{"message": "Updated Successfully"})
+	m["Message"] = "Updated Successfully"
+	m["Color"] = "success"
+	//c.JSON(http.StatusBadRequest, gin.H{"message": "Title/Details cannot be empty"})
+	c.Redirect(302, "/user/my-blog-posts")
+	//c.JSON(201, gin.H{"message": "Updated Successfully"})
 }
 
 func (app *Application) ViewPostById(c *gin.Context) {
@@ -141,8 +166,12 @@ func (app *Application) DeleteBlogPost(c *gin.Context) {
 
 	err := app.postModel.DeletePostById(postId, userId)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"message": "Invalid Request"})
+		//c.JSON(http.StatusBadRequest, gin.H{"message": "Invalid Request"})
 		app.errorLog.Printf("%v", err.Error())
+		m["Message"] = "Invalid Request"
+		m["Color"] = "danger"
+		//c.JSON(http.StatusBadRequest, gin.H{"message": "Title/Details cannot be empty"})
+		c.Redirect(302, "/user/my-blog-posts")
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "Deleted Successfully"})
