@@ -8,10 +8,10 @@
     </div>
     <div class="shadow p-3 mb-5 bg-body rounded">
         <h4>
-            <strong>{{.Post.Title}}</strong>
+            <strong>{{.BlogPost.Title}}</strong>
         </h4>
         <hr>
-        <p>{{.Post.Details}}</p>
+        <p>{{.BlogPost.Details}}</p>
     </div>
 
     <div class="row">
@@ -21,14 +21,14 @@
         </div>
         {{end}}
         <div class="col-md-12 col-sm-12 col-lg-4">
-            <form action="/{{.ID}}/comment/create" method="post">
+            <form action="/blog/{{.BlogPost.ID}}/comment/create" method="post">
                 <textarea class="form-control" name="comment" rows="5" placeholder="Write your comment" required></textarea>
                 <br>
                 <button class="btn btn-dark" type="submit">Comment</button>
             </form>
         </div>
         <div class="col-md-12 col-sm-12 col-lg-6">
-            <h5>Comments <b class="badge bg-success">{{.Comment}}</b></h5>
+            <h5>Comments <b class="badge bg-success">{{len .Comments}}</b></h5>
             <hr>
             {{with .Comments}}{{range $key, $comment := .}}
                 <div class="mb-3" style="border-bottom: dotted lightgreen">{{$comment.Comment}}</div>

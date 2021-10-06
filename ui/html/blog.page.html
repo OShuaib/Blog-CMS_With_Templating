@@ -10,7 +10,22 @@
             >{{ $blog.Title}}</a>
           <p class="text-muted">Posted on: {{$blog.FormatTime $blog.CreatedAt}} By: {{$blog.UserFirstName}} {{$blog.UserLastName}}</p>
           <div class="row card-subtitle mt-2">
+            <div class="col-md-3">
+              <a href="#" class="btn btn-sm btn-light"
+                 id="like" data-check="{{$blog.CreatedAt}}"
+                 data-ux="{{$blog.UserId}}"
+                 data-id="{{$blog.ID}}">Like</a>
+              <div class="badge bg-success" id="counter-{{$blog.CreatedAt}}"></div>
+            </div>
 
+            <div class="col-md-3">
+              Comment:
+              <div class="badge bg-success">{{$blog.CountComment $blog.ID}}</div>
+            </div>
+            <div class="col-md-3">
+              Views:
+              <div class="badge bg-success">{{$blog.Views}}</div>
+            </div>
           </div>
         </div>
       </div>
