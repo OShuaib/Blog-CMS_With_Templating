@@ -21,7 +21,7 @@ func (app *Application) routes(router *gin.Engine) *gin.Engine {
 	{
 		userRouter.GET("/logout", app.LogoutUser)
 		userRouter.GET("/", app.GetUser)
-		userRouter.GET("/viewBlogPost", app.ViewMyBlogPost)
+		userRouter.GET("/my-blog-posts", app.ViewMyBlogPost)
 	}
 
 	blogRouter := router.Group("/blog")
@@ -29,8 +29,10 @@ func (app *Application) routes(router *gin.Engine) *gin.Engine {
 	{
 		blogRouter.POST("/create", app.CreateBlogPost)
 		blogRouter.GET("/", app.ViewAllPosts)
+		blogRouter.GET("/my-blogs", app.ViewAllPosts)
 
 		subRouter := blogRouter.Group("/:id")
+		subRouter.GET("/edit-page", app.editBlogPostPage)
 		subRouter.PUT("/update", app.updateBlogPost)
 		subRouter.DELETE("/", app.DeleteBlogPost)
 		subRouter.GET("/", app.ViewPostById)
