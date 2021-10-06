@@ -3,7 +3,7 @@ package interfaces
 import "github.com/Ad3bay0c/BlogCMS/cmd/models"
 
 type Commentable interface {
-
+	ViewCommentByPostId(postId string) ([]models.Comment, error)
 }
 
 type User interface {
