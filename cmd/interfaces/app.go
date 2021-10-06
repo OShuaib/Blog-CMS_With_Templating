@@ -4,6 +4,7 @@ import "github.com/Ad3bay0c/BlogCMS/cmd/models"
 
 type Commentable interface {
 	ViewCommentByPostId(postId string) ([]models.Comment, error)
+	CreateComment(comment models.Comment) error
 }
 
 type User interface {
@@ -19,4 +20,5 @@ type Blogger interface {
 	UpdatePost(post models.Post) error
 	ViewBlogPostById(postId string) (models.Post, error)
 	DeletePostById(postId string, userId string) error
+	IncrementViews(postId string, views int) error
 }
