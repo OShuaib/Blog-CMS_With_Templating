@@ -19,6 +19,7 @@ type Post struct {
 	Access			int		`json:"access,omitempty"`
 	CreatedAt 		int64	`json:"created_at,omitempty"`
 	UpdatedAt		int64	`json:"updated_at,omitempty"`
+	Comments		int		`json:"comments,omitempty"`
 }
 
 type PostModel struct {
@@ -54,7 +55,7 @@ func (model *PostModel) GetPostsByUserId(userId string) ([]Post, error) {
 }
 
 func (model *PostModel) GetAllPost(userId string) ([]Post, error) {
-	rows, err := model.DB.Query(fmt.Sprintf("SELECT p.id, p.title, p.details, p.access, p.created_at, p.user_id, u.firstname, u.lastname FROM %s p INNER JOIN %s u ON p.user_id = u.id ORDER BY p.created_at DESC;", POST_TABLE, TABLE))
+	rows, err := model.DB.Query(fmt.Sprintf("SELECT p.id, p.title, p.details, p.access, p.created_at, p.user_id, u.firstname, u.lastname FROM %s p INNER JOIN %s u ON p.user_id = u.id WHERE p.access = 0 ORDER BY p.created_at DESC;", POST_TABLE, TABLE))
 	if err != nil {
 		return nil, err
 	}
