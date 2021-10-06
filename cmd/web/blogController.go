@@ -49,7 +49,8 @@ func (app *Application) ViewAllPosts(c *gin.Context) {
 	if len(posts) > 0 {
 		check = true
 	}
-	c.HTML(http.StatusOK, "blog.page.html", gin.H{"Check": check, "Post": posts})
+	app.Render(c, "blog.page.html", user_id, gin.H{"Check": check, "Post": posts})
+	//c.HTML(http.StatusOK, "blog.page.html", gin.H{"Check": check, "Post": posts})
 }
 
 // View all the Post for a particular user
