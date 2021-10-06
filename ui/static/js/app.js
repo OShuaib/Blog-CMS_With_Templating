@@ -1,3 +1,4 @@
+
 let pass = document.querySelector("#pass")
     let togglePass = document.querySelector("#togglePass")
     togglePass.addEventListener("click", (e) => {
@@ -9,3 +10,7 @@ let pass = document.querySelector("#pass")
     togglePass.textContent = "Show"
 }
 })
+
+// $(document).ready(function () {
+//     alert("hello there")
+// })
