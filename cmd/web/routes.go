@@ -7,17 +7,19 @@ import (
 
 func (app *Application) routes(router *gin.Engine) *gin.Engine {
 	//router.GET("/", app.Index)
+	//router.Use(middlewares.CheckNotLogin())
 	router.GET("/", app.Index)
-	router.GET("/signup", app.SignupPageHandler)
-	router.POST("/signUp", app.SignUpUser)
-	router.GET("/login", app.LoginPageHandler)
-	router.POST("/login", app.LoginUser)
+	router.GET("/signup", middlewares.CheckNotLogin(), app.SignupPageHandler)
+	router.POST("/signUp", middlewares.CheckNotLogin(), app.SignUpUser)
+	router.GET("/login", middlewares.CheckNotLogin(), app.LoginPageHandler)
+	router.POST("/login", middlewares.CheckNotLogin(), app.LoginUser)
 
-	router.GET("/logout", app.LogoutUser)
+
 
 	userRouter := router.Group("/user")
-
+	userRouter.Use(middlewares.CheckLogin())
 	{
+		userRouter.GET("/logout", app.LogoutUser)
 		userRouter.GET("/", app.GetUser)
 		userRouter.GET("/viewBlogPost", app.ViewMyBlogPost)
 	}
