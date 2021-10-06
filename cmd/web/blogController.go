@@ -5,6 +5,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"net/http"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -13,27 +15,38 @@ func (app *Application) CreateBlogPost(c *gin.Context) {
 	var blogPost models.Post
 	userId, _ := c.Get("userId")
 	id := userId.(string)
-	err := c.BindJSON(&blogPost)
-	if err != nil {
-		app.ServerError(c, err)
+	//err := c.BindJSON(&blogPost)
+
+	blogPost.Title = strings.TrimSpace(c.PostForm("title"))
+	blogPost.Details = strings.TrimSpace(c.PostForm("details"))
+	access := c.PostForm("access")
+	blogPost.Access, _ = strconv.Atoi(access)
+
+	if blogPost.Title == "" || blogPost.Details == "" {
+		m["Message"] = "Title/Details cannot be empty"
+		m["Color"] = "danger"
+		//c.JSON(http.StatusBadRequest, gin.H{"message": "Title/Details cannot be empty"})
+		c.Redirect(302, "/user/my-blog-posts")
 		return
 	}
 
-	if blogPost.Title == "" || blogPost.Details == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"message": "Title/Details cannot be empty"})
-		return
-	}
 	blogPost.ID = uuid.New().String()
 	blogPost.UserId = id
 	blogPost.CreatedAt = time.Now().Unix()
 	blogPost.UpdatedAt = time.Now().Unix()
 
-	err = app.postModel.SavePost(blogPost)
+	err := app.postModel.SavePost(blogPost)
 	if err != nil {
-		app.ServerError(c, err)
+		app.errorLog.Printf("%v", err.Error())
+		m["Message"] = "OOPS!!!, Something Went Wrong"
+		m["Color"] = "danger"
+		//c.JSON(http.StatusBadRequest, gin.H{"message": "Title/Details cannot be empty"})
+		c.Redirect(302, "/user/my-blog-posts")
 		return
 	}
-	c.JSON(201, gin.H{"message" : "Blog Post Created Successfully"})
+	m["Message"] = "Post Created Successfully"
+	m["Color"] = "success"
+	c.Redirect(302, "/user/my-blog-posts")
 }
 // View All Public Posts in the database
 func (app *Application) ViewAllPosts(c *gin.Context) {
@@ -63,7 +76,15 @@ func (app *Application) ViewMyBlogPost(c *gin.Context) {
 		app.ServerError(c, err)
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"data": posts})
+	m["Data"] = posts
+	//c.JSON(http.StatusOK, gin.H{"data": posts})
+	app.Render(c, "create.page.html", user_id, m)
+	m["Message"] = ""
+	m["Color"] = ""
+	delete(m, "Post")
+}
+func (app *Application) editBlogPostPage(c *gin.Context) {
+
 }
 
 func (app *Application) updateBlogPost(c *gin.Context) {
