@@ -3,6 +3,8 @@ package models
 import (
 	"database/sql"
 	"fmt"
+	"github.com/Ad3bay0c/BlogCMS/pkg/postgresql"
+	"log"
 )
 
 const (
@@ -37,4 +39,27 @@ func (model *CommentModel) ViewCommentByPostId(postId string) ([]Comment, error)
 		comments = append(comments, comment)
 	}
 	return comments, nil
+}
+
+func (model *CommentModel) CreateComment(comment Comment) error {
+	stmt, err := model.DB.Prepare(fmt.Sprintf("INSERT INTO %s (id, comment, post_id, created_at, updated_at, user_id) VALUES($1, $2, $3, $4, $5, $6);", COMMENT_TABLE))
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(comment.ID, comment.Comment, comment.PostId, comment.CreatedAt, comment.UpdatedAt, comment.UserId)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+func CountComment(postId string) int {
+	db, _ := postgresql.ConnectDb()
+	row := db.QueryRow(fmt.Sprintf("SELECT count(*) as count FROM %s WHERE post_id = $1", COMMENT_TABLE), postId)
+	var count int
+	err := row.Scan(&count)
+	if err != nil {
+		log.Printf("%v", err.Error())
+		return 0
+	}
+	return count
 }
