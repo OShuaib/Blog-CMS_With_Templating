@@ -1,4 +1,4 @@
-{{template "master"}}
+{{template "header.component.html" .}}
 
 <div class="container mt-3">
     <div class="row justify-content-center">
@@ -9,7 +9,7 @@
                 {{ .Message}}
             </div>
             {{end}}
-            <form action="{{if .Post.ID}}/{{ .Post.ID}}/update{{ else}}/create{{end}}"
+            <form action="{{if .Post.ID}}/blog/{{ .Post.ID}}/update{{ else}}/blog/create{{end}}"
                   method="POST">
                 <h4>{{if .Post.ID}}Update Blog{{else}}Create New Blog{{end}}</h4>
                 <div class="mb-3">
@@ -25,6 +25,13 @@
                               name="details" rows="3" required>{{if .Post.ID}}{{.Post.Details}}{{end}}</textarea>
                 </div>
                 <div class="mb-3">
+                    <label for="access" class="form-label">Access</label>
+                    <select name="access" id="access" class="form-control">
+                        <option value="0" {{ if not .Post.Access}} selected {{end}}>Public</option>
+                        <option value="1" {{ if .Post.Access}} selected {{end}}>Private</option>
+                    </select>
+                </div>
+                <div class="mb-3">
                         <button type="submit" class="btn btn-dark btn-block float-right form-control">
                             {{if .Post.ID}}Update Blog {{else}}Create New Blog Post{{end}}
                         </button>
@@ -33,13 +40,20 @@
         </div>
         <div class="col-6">
             <h4>Previous Blog Post</h4>
-            {{range .Data.BlogPosts}}
+            {{range .Data}}
 
             <div class="row mb-3">
-                <a href="#" style="text-decoration: none">{{ .Title}}</a>
+                <div class="col-md-6"><a href="#" style="text-decoration: none">{{ .Title}}</a></div>
+                <div class="col-md-6" >
+                    {{ if .Access}}
+                        <div class="badge bg-secondary">Private</div>
+                    {{ else }}
+                    <div class="badge bg-dark">Public</div>
+                    {{end}}
+                </div>
                 <div class="row">
-                    <a href="/{{.ID}}/edit" class="col-2 btn btn-primary btn-sm">Edit</a>
-                    <a href="/{{.ID}}/delete" onclick="return confirm('Are you sure you want to delete?')"
+                    <a href="/blog/{{.ID}}/edit-page" class="col-2 btn btn-primary btn-sm">Edit</a>
+                    <a href="/blog/{{.ID}}/delete" onclick="return confirm('Are you sure you want to delete?')"
                        class="col-2 btn btn-danger btn-sm">Delete</a>
                 </div>
             </div>
@@ -47,3 +61,4 @@
         </div>
     </div>
 </div>
+{{ template "footer.component.html" }}
