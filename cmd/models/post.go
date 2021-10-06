@@ -38,7 +38,7 @@ func (model *PostModel) SavePost(post Post) error {
 }
 
 func (model *PostModel) GetPostsByUserId(userId string) ([]Post, error) {
-	rows, err := model.DB.Query(fmt.Sprintf("SELECT id, title, details, access, created_at FROM %s WHERE user_id = $1", POST_TABLE), userId)
+	rows, err := model.DB.Query(fmt.Sprintf("SELECT id, title, details, access, created_at FROM %s WHERE user_id = $1 ORDER BY created_at DESC", POST_TABLE), userId)
 	if err != nil {
 		return nil, err
 	}
