@@ -4,6 +4,8 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"github.com/Ad3bay0c/BlogCMS/pkg/postgresql"
+	"log"
 	"time"
 )
 const (
@@ -20,6 +22,7 @@ type Post struct {
 	CreatedAt 		int64	`json:"created_at,omitempty"`
 	UpdatedAt		int64	`json:"updated_at,omitempty"`
 	Comments		int		`json:"comments,omitempty"`
+	Views			int		`json:"views,omitempty"`
 }
 
 type PostModel struct {
@@ -56,14 +59,14 @@ func (model *PostModel) GetPostsByUserId(userId string) ([]Post, error) {
 }
 
 func (model *PostModel) GetAllPost(userId string) ([]Post, error) {
-	rows, err := model.DB.Query(fmt.Sprintf("SELECT p.id, p.title, p.details, p.access, p.created_at, p.user_id, u.firstname, u.lastname FROM %s p INNER JOIN %s u ON p.user_id = u.id WHERE p.access = 0 ORDER BY p.created_at DESC;", POST_TABLE, TABLE))
+	rows, err := model.DB.Query(fmt.Sprintf("SELECT p.id, p.title, p.details, p.access, p.created_at, p.user_id, p.views, u.firstname, u.lastname FROM %s p INNER JOIN %s u ON p.user_id = u.id WHERE p.access = 0 ORDER BY p.created_at DESC;", POST_TABLE, TABLE))
 	if err != nil {
 		return nil, err
 	}
 	var posts []Post
 	for rows.Next() {
 		var post Post
-		err := rows.Scan(&post.ID, &post.Title, &post.Details, &post.Access, &post.CreatedAt, &post.UserId, &post.UserFirstName, &post.UserLastName)
+		err := rows.Scan(&post.ID, &post.Title, &post.Details, &post.Access, &post.CreatedAt, &post.UserId, &post.Views, &post.UserFirstName, &post.UserLastName)
 		if err != nil {
 			return nil, err
 		}
@@ -90,8 +93,8 @@ func (model *PostModel) UpdatePost(post Post) error {
 
 func (model *PostModel) ViewBlogPostById(postId string) (Post, error) {
 	var post Post
-	row := model.DB.QueryRow(fmt.Sprintf("SELECT id, title, details, user_id, created_at, access FROM %s WHERE id = $1", POST_TABLE), postId)
-	err := row.Scan(&post.ID, &post.Title, &post.Details, &post.UserId, &post.CreatedAt, &post.Access)
+	row := model.DB.QueryRow(fmt.Sprintf("SELECT id, title, details, user_id, created_at, access, views FROM %s WHERE id = $1", POST_TABLE), postId)
+	err := row.Scan(&post.ID, &post.Title, &post.Details, &post.UserId, &post.CreatedAt, &post.Access, &post.Views)
 	if err != nil {
 		return post, err
 	}
@@ -114,7 +117,29 @@ func (model *PostModel) DeletePostById(postId string, userId string) error {
 	return nil
 }
 
+func (post Post) CountComment(postId string) int {
+	db, _ := postgresql.ConnectDb()
+	row := db.QueryRow(fmt.Sprintf("SELECT count(*) as count FROM %s WHERE post_id = $1", COMMENT_TABLE), postId)
+	var count int
+	err := row.Scan(&count)
+	if err != nil {
+		log.Printf("%v", err.Error())
+		return 0
+	}
+	return count
+}
 
+func (model PostModel) IncrementViews(postId string, views int) error {
+	stmt, err := model.DB.Prepare(fmt.Sprintf("UPDATE %s SET views = $1 WHERE id = $2", POST_TABLE))
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(views, postId)
+	if err != nil {
+		return err
+	}
+	return nil
+}
 func (p Post) FormatTime(t int64) string {
 	return time.Unix(t, 0).Format("Jan 02, 2006")
 }
