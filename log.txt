@@ -5,3 +5,27 @@ Error:	2021/10/05 23:14:23 controller.go:39: An Error Occurred: invalid characte
 Error:	2021/10/05 23:19:58 controller.go:39: An Error Occurred: invalid character 'e' looking for beginning of value
 Error:	2021/10/05 23:21:22 controller.go:39: An Error Occurred: invalid character 'e' looking for beginning of value
 INFO:	2021/10/05 23:37:20 controller.go:102: Registration Successful
+Error:	2021/10/06 12:38:43 controller.go:112: 
+Error:	2021/10/06 12:38:51 controller.go:112: 
+Error:	2021/10/06 12:39:03 controller.go:112: 
+Error:	2021/10/06 12:48:55 controller.go:112: 
+Error:	2021/10/06 12:51:36 controller.go:112: 
+Error:	2021/10/06 12:52:02 controller.go:112: 
+Error:	2021/10/06 13:12:09 controller.go:112: 
+Error:	2021/10/06 13:14:34 controller.go:112: 
+Error:	2021/10/06 13:29:19 controller.go:112: 
+Error:	2021/10/06 13:30:24 controller.go:112: 
+Error:	2021/10/06 13:31:39 controller.go:112: 
+Error:	2021/10/06 13:44:48 controller.go:112: 
+Error:	2021/10/06 13:45:35 controller.go:112: 
+INFO:	2021/10/06 13:47:13 controller.go:105: Registration Successful
+Error:	2021/10/06 13:47:25 controller.go:112: 
+Error:	2021/10/06 13:54:26 controller.go:112: 
+Error:	2021/10/06 13:57:40 controller.go:112: 
+Error:	2021/10/06 14:23:12 blogController.go:40: pq: value too long for type character varying(50)
+Error:	2021/10/06 14:25:24 controller.go:112: 
+Error:	2021/10/06 14:47:08 controller.go:112: 
+Error:	2021/10/06 15:42:13 controller.go:112: 
+Error:	2021/10/06 15:48:39 blogController.go:162: pq: column "comment" does not exist
+Error:	2021/10/06 15:48:43 blogController.go:162: pq: column "comment" does not exist
+Error:	2021/10/06 15:48:45 blogController.go:162: pq: column "comment" does not exist
