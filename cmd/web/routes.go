@@ -33,8 +33,8 @@ func (app *Application) routes(router *gin.Engine) *gin.Engine {
 
 		subRouter := blogRouter.Group("/:id")
 		subRouter.GET("/edit-page", app.editBlogPostPage)
-		subRouter.PUT("/update", app.updateBlogPost)
-		subRouter.DELETE("/", app.DeleteBlogPost)
+		subRouter.POST("/update", app.updateBlogPost)
+		subRouter.GET("/delete", app.DeleteBlogPost)
 		subRouter.GET("/", app.ViewPostById)
 
 		commentRouter := subRouter.Group("/comment")
