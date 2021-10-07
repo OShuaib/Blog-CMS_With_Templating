@@ -129,6 +129,33 @@ func (post Post) CountComment(postId string) int {
 	return count
 }
 
+func (post Post) CountLikes() int {
+	db, _ := postgresql.ConnectDb()
+	row := db.QueryRow(fmt.Sprintf("SELECT count(*) as count FROM likes WHERE post_id = $1"), post.ID)
+	var count int
+	err := row.Scan(&count)
+	if err != nil {
+		log.Printf("%v", err.Error())
+		return 0
+	}
+	return count
+}
+
+func (post Post) CheckLike() bool {
+	db, _ := postgresql.ConnectDb()
+	row := db.QueryRow(fmt.Sprintf("SELECT count(*) as count FROM likes WHERE post_id = $1 AND user_id = $2"), post.ID, post.UserId)
+	var count int
+	err := row.Scan(&count)
+	if err != nil {
+		//log.Printf("%v", err.Error())
+		return false
+	}
+	if count < 1 {
+		return false
+	}
+	return true
+}
+
 func (model PostModel) IncrementViews(postId string, views int) error {
 	stmt, err := model.DB.Prepare(fmt.Sprintf("UPDATE %s SET views = $1 WHERE id = $2", POST_TABLE))
 	if err != nil {
@@ -140,6 +167,7 @@ func (model PostModel) IncrementViews(postId string, views int) error {
 	}
 	return nil
 }
+
 func (p Post) FormatTime(t int64) string {
 	return time.Unix(t, 0).Format("Jan 02, 2006")
 }
