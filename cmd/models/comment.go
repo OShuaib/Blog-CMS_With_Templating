@@ -63,3 +63,4 @@ func CountComment(postId string) int {
 	}
 	return count
 }
+
